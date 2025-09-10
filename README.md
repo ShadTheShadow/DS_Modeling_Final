@@ -1,19 +1,16 @@
 # Titanic Survival and Passenger Fare Analysis
 ## Data Science Modeling Final
 
-## 📖 Introduction
+## Introduction
 When people think about the Titanic, they usually focus on the sinking or the enormous casualty numbers.  
 Our group explored a deeper story: **Did higher ticket fares increase the chances of survival?**
 
 **Research Question:**  
 _Is there a positive difference in mean passenger fare between those who survived and those who died in the Titanic disaster?_
 
-**Summary of Findings:**  
-We found strong evidence that the average passenger fare was higher for survivors compared to non-survivors.
-
 ---
 
-## 📊 Background
+## Background
 - **Dataset Source:** Organized by Will Cukierski, based on Titanic search and rescue team data.  
 - **Key Variables:**
   - `Survived`: Indicates whether a passenger survived (1) or died (0).  
@@ -25,10 +22,16 @@ We found strong evidence that the average passenger fare was higher for survivor
 
 ---
 
-## 🧹 Data Cleaning & Preparation
+## Data Cleaning & Preparation
 - Removed outliers using median ± 1.5×IQR method.  
 - Focused on `Survived` and `Fare` variables.  
 - Produced histograms of fare distribution by survival status.
 
-cleaned_data <- data %>%
-  filter(Fare > med - 1.5*IQR, Fare < med + 1.5*IQR)
+## Findings
+![Fare graph](https://github.com/user-attachments/assets/5bc400c9-a3dc-4a1a-bc86-28593d542c06)
+
+- After thorough analysis, we found strong evidence that the average passenger fare was higher for survivors compared to non-survivors.
+- Histogram visualizations also showed distinct distributions for each group
+- Suggests that socioeconomic status influenced survival odds
+
+
