@@ -1,0 +1,115 @@
+---
+title: "full_report"
+output: html_document
+---
+
+> Group members: Evan Williams, Ardit Ikonomi, Abdul Khayyum, Garrett Kulhanek
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE,
+                      warning = FALSE, error = TRUE,
+                      fig.height = 3)
+library(tidyverse)
+library(ggplot2)
+```
+
+# Introduction
+
+When people think about the Titanic, they usually focus on the sinking of the vessel or the enormous casualty numbers. The deeper story started to fascinate us because we wanted to understand social class in survival rates during the disaster. The substantial price disparities between different Titanic passenger tickets made us wonder if higher fares enhanced survival chances. Our group chose this research the question:
+
+> Is there a positive difference in mean passenger fare between those who survived and those who died in the Titanic disaster?
+
+In our statistical analysis, we find strong evidence that the average passenger fare is higher for those who survived the Titanic disaster compared to those who did not
+
+
+# Background
+
+The data we used was collected by a search and rescue team at the Titanic and it was organized by Will Cukierski. The variables we focused on were survival and passenger fare where one row of the dataset would represent the survival of a passenger and the fare that they paid. The survival variable represents who survived and who didn’t survive, while passenger fare represents the ticket or fare price that each passenger paid to get onto the cruiser liner. The population of interest includes all the Titanic passengers, and in this case we have a sample size of 891 of those passengers
+The Titanic was a british cruise liner that famously sank after hitting an iceberg on its maiden voyage in 1912, despite its “unsinkable” reputation. The Titanic was one of the most luxurious cruise liners of its time and hosted a diverse group of passengers based on their class structures, leading to significantly different passenger fare prices
+
+### Cleaning Data
+```{r}
+
+data <- read_csv("titanic_data.csv") %>% select(Survived, Fare)
+
+data
+
+med <- median(data$Fare)
+IQR <- IQR(data$Fare)
+
+cleaned_data <- data %>% filter(data$Fare > med - 1.5*IQR, data$Fare < med + 1.5*IQR)
+```
+
+
+```{r}
+ggplot(cleaned_data, aes(x = Fare, fill = factor(Survived))) +
+  geom_histogram(position = "identity", alpha = 0.5, bins = 40) +
+  scale_fill_manual(values = c("1" = "green", "0" = "red")) +
+  labs(title = "Fare Distribution: Survived vs. Died",
+       x = "Fare",
+       y = "Count")
+```
+
+# Statistical analysis
+
+x1: pop. mean in tickets for passengers who survived
+x2: pop. mean in tickets for passengers who died
+
+The assumptions for this method of inference include; independence, an approximately normal distribution of ticket fares within each group, and representative data from the population, all of which are met.
+
+Parameter: x1-x2 (true difference in ticket fare for passengers who survived and those who died)
+
+Confidence level = 95%
+
+We are using a hypothesis testing for a difference in two means
+H0: x1-x2 = 0, Ha: x1-x2 > 0
+
+
+
+```{r}
+
+survived <- cleaned_data %>% filter(Survived == 1)
+died <- cleaned_data %>% filter(Survived == 0)
+
+n1 <- nrow(survived)
+n2 <- nrow(died)
+
+sd1 <- sd(survived$Fare)
+sd2 <- sd(died$Fare)
+
+survived_mean <- mean(survived$Fare)
+
+died_mean <- mean(died$Fare)
+
+
+test_stat <- (survived_mean-died_mean)/sqrt(sd1^2/n1 + sd2^2/n2)
+
+welch_df <- (sd1^2/n1 + sd2^2/n2)^2/((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
+
+
+
+pt(test_stat, welch_df, lower.tail=F)
+
+
+```
+> p-value: 5.834381e-06
+
+
+
+# Discussion
+
+Because p-value = 5.834381e-06 < alpha = 0.05, we reject the null hypothesis and have significant evidence that x1-x2 > 0. 
+
+This means that based off the trends in our sample, it is very unlikely that the difference in mean passenger fare between those who survived and those who died is zero, and we have evidence that there is a postive difference in mean passenger fare between those who survived and those who died
+
+
+Short comings:
+- While we were able to accurately answer our research question with the data set, one limitation was the lack of accounting for confounding variables such as age, gender, or class
+
+Additional questions:
+
+- Were higher fares directly linked to access to better emergency procedures or lifeboats, explaining the increased survival rate?
+- Did the relationship between fare and survival hold equally true for different demographic groups ( men, women, children)?
+
+
