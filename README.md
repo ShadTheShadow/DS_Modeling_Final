@@ -1,5 +1,5 @@
 # Titanic Survival and Passenger Fare Analysis
-## Data Science Modeling Final
+*Data Science Modeling Final*
 
 ## Introduction
 When people think about the Titanic, they usually focus on the sinking or the enormous casualty numbers.  
@@ -26,6 +26,8 @@ _Is there a positive difference in mean passenger fare between those who survive
 - Removed outliers using median ± 1.5×IQR method.  
 - Focused on `Survived` and `Fare` variables.  
 - Produced histograms of fare distribution by survival status.
+
+---
 
 ## Findings
 ![Fare graph](https://github.com/user-attachments/assets/5bc400c9-a3dc-4a1a-bc86-28593d542c06)
